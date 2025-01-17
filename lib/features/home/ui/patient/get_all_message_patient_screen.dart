@@ -51,118 +51,116 @@ class _GetAllMessagePatientScreenState
           ),
         ),
         body: SingleChildScrollView(
-          child: Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SafeArea(
-                  minimum: EdgeInsets.symmetric(vertical: 5.h),
-                  child: BlocBuilder<PatientCubit, PatientP>(
-                    buildWhen: (previous, current) =>
-                        current is GetAllMessagesLoadingP ||
-                        current is GetAllMessagesSuccessP ||
-                        current is GetAllMessagesFailureP ||
-                        current is SendMessagesLoadingP ||
-                        current is SendMessagesSuccessP ||
-                        current is SendMessagesFailureP,
-                    builder: (context, state) {
-                      if (state is GetAllMessagesLoadingP||state is SendMessagesLoadingP) {
-                        return SizedBox(
-                          height: 655.h,
-                          child: const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        );
-                      }
-                      if (state is GetAllMessagesSuccessP) {
-                        final messages =
-                            state.messages; // List<GetMessageModel>
-                        final hasMessages = messages.messages.isNotEmpty;
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SafeArea(
+                minimum: EdgeInsets.symmetric(vertical: 5.h),
+                child: BlocBuilder<PatientCubit, PatientP>(
+                  buildWhen: (previous, current) =>
+                      current is GetAllMessagesLoadingP ||
+                      current is GetAllMessagesSuccessP ||
+                      current is GetAllMessagesFailureP ||
+                      current is SendMessagesLoadingP ||
+                      current is SendMessagesSuccessP ||
+                      current is SendMessagesFailureP,
+                  builder: (context, state) {
+                    if (state is GetAllMessagesLoadingP||state is SendMessagesLoadingP) {
+                      return SizedBox(
+                        height: 655.h,
+                        child: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
+                    if (state is GetAllMessagesSuccessP) {
+                      final messages =
+                          state.messages; // List<GetMessageModel>
+                      final hasMessages = messages.messages.isNotEmpty;
 
-                        return hasMessages
-                            ? SizedBox(
-                                height: 655.h,
-                                child: ListView.builder(
-                                  itemCount: messages.messages.length,
-                                  itemBuilder: (context, index) {
-                                    final message = messages.messages[index];
+                      return hasMessages
+                          ? SizedBox(
+                              height: 655.h,
+                              child: ListView.builder(
+                                itemCount: messages.messages.length,
+                                itemBuilder: (context, index) {
+                                  final message = messages.messages[index];
 
-                                    final formattedTime =
-                                        DateFormat('hh:mm a').format(
-                                      DateTime.parse(message.timestamp),
-                                    );
+                                  final formattedTime =
+                                      DateFormat('hh:mm a').format(
+                                    DateTime.parse(message.timestamp),
+                                  );
 
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0, vertical: 4.0),
-                                      child: Align(
-                                        alignment: message.senderId == userId
-                                            ? Alignment.centerRight
-                                            : Alignment.centerLeft,
-                                        child: Container(
-                                          padding: const EdgeInsets.all(12.0),
-                                          decoration: BoxDecoration(
-                                            color: message.senderId == userId
-                                                ? Colors.grey[100]
-                                                : Colors.blue[200],
-                                            borderRadius:
-                                                BorderRadius.circular(12.0),
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              message.imageUrl == 'image'
-                                                  ? Text(
-                                                      message.message,
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                      ),
-                                                    )
-                                                  : AppCachedNetworkImage(
-                                                      imageUrl: message.imageUrl
-                                                          .toString()),
-                                              const SizedBox(height: 8.0),
-                                              Text(
-                                                formattedTime,
-                                                style: const TextStyle(
-                                                  fontSize: 12,
-                                                  color: Colors.grey,
-                                                ),
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0, vertical: 4.0),
+                                    child: Align(
+                                      alignment: message.senderId == userId
+                                          ? Alignment.centerRight
+                                          : Alignment.centerLeft,
+                                      child: Container(
+                                        padding: const EdgeInsets.all(12.0),
+                                        decoration: BoxDecoration(
+                                          color: message.senderId == userId
+                                              ? Colors.grey[100]
+                                              : Colors.blue[200],
+                                          borderRadius:
+                                              BorderRadius.circular(12.0),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            message.imageUrl == 'image'
+                                                ? Text(
+                                                    message.message,
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                    ),
+                                                  )
+                                                : AppCachedNetworkImage(
+                                                    imageUrl: message.imageUrl
+                                                        .toString()),
+                                            const SizedBox(height: 8.0),
+                                            Text(
+                                              formattedTime,
+                                              style: const TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.grey,
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    );
-                                  },
-                                ),
-                              )
-                            : SizedBox(
-                                height: 655.h,
-                                child: const Center(
-                                  child: Text('No messages available'),
-                                ),
-                              );
-                      }
-                      if (state is GetAllMessagesFailureP) {
-                        return Center(
-                          child: Text(
-                            state.failure.message.toString(),
-                            style: const TextStyle(color: Colors.red),
-                          ),
-                        );
-                      }
-
-                      return const Center(
-                        child: Text('Unexpected state'),
+                                    ),
+                                  );
+                                },
+                              ),
+                            )
+                          : SizedBox(
+                              height: 655.h,
+                              child: const Center(
+                                child: Text('No messages available'),
+                              ),
+                            );
+                    }
+                    if (state is GetAllMessagesFailureP) {
+                      return Center(
+                        child: Text(
+                          state.failure.message.toString(),
+                          style: const TextStyle(color: Colors.red),
+                        ),
                       );
-                    },
-                  ),
+                    }
+
+                    return const Center(
+                      child: Text('Unexpected state'),
+                    );
+                  },
                 ),
-                _sendMessageForm(),
-              ],
-            ),
+              ),
+              _sendMessageForm(),
+            ],
           ),
         ),
       ),

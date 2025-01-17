@@ -6,7 +6,7 @@ import 'package:tumer_detection/core/caching/app_shared_pref_key.dart';
 import 'package:tumer_detection/core/di/dependency_injection.dart';
 import 'package:tumer_detection/core/helper/bloc_obsever.dart';
 import 'package:tumer_detection/tumer_app.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initGetIt();
@@ -17,6 +17,8 @@ void main() async {
   name = await AppSharedPref.sharedPrefGet(key: AppSharedPrefKey.name);
   email = await AppSharedPref.sharedPrefGet(key: AppSharedPrefKey.email);
   runApp(const ProviderScope(child: TumerApp()));
-print('rooools$role');
+  await ScreenUtil.ensureScreenSize();
+
+  print('rooools$role');
 print('rooools$userId');
 }
